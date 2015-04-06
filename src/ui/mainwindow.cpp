@@ -24,10 +24,13 @@
 #include <QTimer>
 
 #ifdef USE_WEBENGINE
-#include <QWebEngineSettings>
+    #include <QWebEngineHistory>
+    #include <QWebEnginePage>
+    #include <QWebEngineSettings>
 #else
-#include <QWebFrame>
-#include <QWebPage>
+    #include <QWebFrame>
+    #include <QWebHistory>
+    #include <QWebPage>
 #endif
 
 #include <qxtglobalshortcut.h>
@@ -201,8 +204,12 @@ MainWindow::MainWindow(Core::Application *app, QWidget *parent) :
 
     connect(ui->webView, &SearchableWebView::urlChanged, [this](const QUrl &url) {
         const QString name = docsetName(url);
-        loadSections(name, url);
         m_tabBar->setTabIcon(m_tabBar->currentIndex(), docsetIcon(name));
+
+        Docset *docset = m_application->docsetRegistry()->docset(name);
+        if (docset)
+            m_searchState->sectionsList->setResults(docset->relatedLinks(url));
+
         displayViewActions();
     });
 
@@ -225,10 +232,17 @@ MainWindow::MainWindow(Core::Application *app, QWidget *parent) :
     connect(m_application->docsetRegistry(), &DocsetRegistry::docsetRemoved,
             [this](const QString &name) {
         for (SearchState *searchState : m_tabs) {
+#ifdef USE_WEBENGINE
+            if (docsetName(searchState->page->url()) != name)
+                continue;
+
+            searchState->page->load(QUrl(startPageUrl));
+#else
             if (docsetName(searchState->page->mainFrame()->url()) != name)
                 continue;
 
             searchState->page->mainFrame()->load(QUrl(startPageUrl));
+#endif
             /// TODO: Cleanup history
         }
     });
@@ -275,6 +289,7 @@ MainWindow::MainWindow(Core::Application *app, QWidget *parent) :
     m_tabBar->setUsesScrollButtons(true);
     m_tabBar->setDrawBase(false);
     m_tabBar->setDocumentMode(true);
+    m_tabBar->setElideMode(Qt::ElideRight);
     m_tabBar->setStyleSheet(QStringLiteral("QTabBar::tab { width: 150px; }"));
 
     connect(m_tabBar, &QTabBar::currentChanged, this, &MainWindow::goToTab);
@@ -421,7 +436,7 @@ void MainWindow::createTab()
 
     reloadTabState();
 #ifdef USE_WEBENGINE
-    newTab->page->load(QUrl(indexPageUrl));
+    newTab->page->load(QUrl(startPageUrl));
 #else
     newTab->page->mainFrame()->load(QUrl(startPageUrl));
 #endif
@@ -524,15 +539,6 @@ void MainWindow::onSearchComplete()
     m_searchState->zealSearch->setResults(m_application->docsetRegistry()->queryResults());
 }
 
-void MainWindow::loadSections(const QString &docsetName, const QUrl &url)
-{
-    Docset *docset = m_application->docsetRegistry()->docset(docsetName);
-    if (!docset)
-        return;
-
-    m_searchState->sectionsList->setResults(docset->relatedLinks(url));
-}
-
 // Sets up the search box autocompletions.
 void MainWindow::setupSearchBoxCompletions()
 {
@@ -580,7 +586,7 @@ void MainWindow::forward()
     displayViewActions();
 }
 
-QAction *MainWindow::addHistoryAction(QWebHistory *history, QWebHistoryItem item)
+QAction *MainWindow::addHistoryAction(QWebHistory *history, const QWebHistoryItem &item)
 {
     const QIcon icon = docsetIcon(docsetName(item.url()));
     QAction *backAction = new QAction(icon, item.title(), ui->menuView);
