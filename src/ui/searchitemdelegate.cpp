@@ -43,12 +43,13 @@ void SearchItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     const int margin = style.pixelMetric(QStyle::PM_FocusFrameHMargin, 0, m_view);
     rect.adjust(margin, 0, 2, 0); // +2px for bold text
 
-    QFont bold(painter->font());
-    bold.setBold(true);
-    const QFontMetrics metricsBold(bold);
-
     const QFontMetrics metrics(painter->font());
     QString elided = metrics.elidedText(index.data().toString(), option.textElideMode, rect.width());
+
+    QFont bold(painter->font());
+//    bold.setBold(true);
+    bold.setUnderline(true);
+    const QFontMetrics metricsBold(bold);
 
     QString highlight;
     if (m_lineEdit)
