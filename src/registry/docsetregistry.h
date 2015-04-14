@@ -43,7 +43,7 @@ signals:
 
 private slots:
     void _addDocset(const QString &path);
-    void _runQuery(const QString &rawQuery, int queryNum);
+    void _runQuery(const QString &query);
 
 private:
     void addDocsetsFromFolder(const QString &path);
@@ -51,7 +51,6 @@ private:
     QThread *m_thread = nullptr;
     QMap<QString, Docset *> m_docsets;
     QList<SearchResult> m_queryResults;
-    int m_lastQuery = -1;
 };
 
 } // namespace Zeal

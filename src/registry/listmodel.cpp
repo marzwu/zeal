@@ -5,8 +5,6 @@
 
 using namespace Zeal;
 
-/// TODO: Get rid of const_casts
-
 ListModel::ListModel(DocsetRegistry *docsetRegistry, QObject *parent) :
     QAbstractItemModel(parent),
     m_docsetRegistry(docsetRegistry)
@@ -16,6 +14,14 @@ ListModel::ListModel(DocsetRegistry *docsetRegistry, QObject *parent) :
 
     for (const QString &name : m_docsetRegistry->names())
         addDocset(name);
+}
+
+ListModel::~ListModel()
+{
+    for (DocsetItem *item : m_docsetItems) {
+        qDeleteAll(item->groups);
+        delete item;
+    }
 }
 
 QVariant ListModel::data(const QModelIndex &index, int role) const
@@ -65,11 +71,13 @@ QVariant ListModel::data(const QModelIndex &index, int role) const
             return QVariant();
         }
     case DocsetNameRole:
-        if (!index.parent().isValid())
-            return m_docsetRegistry->docset(index.row())->name();
+        if (index.parent().isValid())
+            return QVariant();
+        return m_docsetRegistry->docset(index.row())->name();
     case UpdateAvailableRole:
-        if (!index.parent().isValid())
-            return m_docsetRegistry->docset(index.row())->hasUpdate;
+        if (index.parent().isValid())
+            return QVariant();
+        return m_docsetRegistry->docset(index.row())->hasUpdate;
     default:
         return QVariant();
     }

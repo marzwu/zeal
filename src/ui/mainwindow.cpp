@@ -91,7 +91,7 @@ MainWindow::MainWindow(Core::Application *app, QWidget *parent) :
         m_settings->splitterGeometry = ui->splitter->saveState();
     });
 
-    m_zealNetworkManager = new NetworkAccessManager();
+    m_zealNetworkManager = new NetworkAccessManager(this);
 #ifdef USE_WEBENGINE
     /// FIXME AngularJS workaround (zealnetworkaccessmanager.cpp)
 #else
@@ -324,6 +324,12 @@ MainWindow::MainWindow(Core::Application *app, QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+
+    for (SearchState *state : m_tabs) {
+        delete state->zealSearch;
+        delete state->sectionsList;
+        delete state;
+    }
 }
 
 void MainWindow::openDocset(const QModelIndex &index)
@@ -467,7 +473,11 @@ void MainWindow::displayTabs()
         action->setChecked(i == m_tabBar->currentIndex());
 
         if (i < 10) {
+#ifdef Q_OS_LINUX
+            const QKeySequence shortcut = QString("Alt+%1").arg(QString::number((i + 1) % 10));
+#else
             const QKeySequence shortcut = QString("Ctrl+%1").arg(QString::number((i + 1) % 10));
+#endif
 
             for (QAction *oldAction : actions()) {
                 if (oldAction->shortcut() == shortcut)
@@ -544,7 +554,7 @@ void MainWindow::setupSearchBoxCompletions()
 {
     QStringList completions;
     for (const Docset * const docset: m_application->docsetRegistry()->docsets())
-        completions << docset->prefix + QLatin1Char(':');
+        completions << docset->keyword() + QLatin1Char(':');
     ui->lineEdit->setCompletions(completions);
 }
 

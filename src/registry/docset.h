@@ -14,24 +14,18 @@ class Docset : public QObject
 {
     Q_OBJECT
 public:
-    enum class Type {
-        Dash,
-        ZDash
-    };
-
     explicit Docset(const QString &path);
     ~Docset() override;
 
     bool isValid() const;
-    bool hasMetadata() const;
 
     QString name() const;
     QString title() const;
+    QString keyword() const;
 
     QString version() const;
     QString revision() const;
 
-    Docset::Type type() const;
     QString path() const;
     QString documentPath() const;
     QIcon icon() const;
@@ -42,11 +36,10 @@ public:
 
     const QMap<QString, QString> &symbols(const QString &symbolType) const;
 
+    QList<SearchResult> search(const QString &query) const;
     QList<SearchResult> relatedLinks(const QUrl &url) const;
 
     QSqlDatabase database() const;
-
-    QString prefix;
 
     /// FIXME: This is an ugly workaround before we have a proper docset sources implementation
     bool hasUpdate = false;
@@ -55,6 +48,12 @@ public:
     static void normalizeName(QString &name, QString &parentName);
 
 private:
+    enum class Type {
+        Invalid,
+        Dash,
+        ZDash
+    };
+
     void loadMetadata();
     void countSymbols();
     void loadSymbols(const QString &symbolType) const;
@@ -62,15 +61,13 @@ private:
 
     static QString parseSymbolType(const QString &str);
 
-    bool m_isValid = false;
-    bool m_hasMetadata = false;
-
     QString m_sourceId;
     QString m_name;
     QString m_title;
+    QString m_keyword;
     QString m_version;
     QString m_revision;
-    Docset::Type m_type;
+    Docset::Type m_type = Type::Invalid;
     QString m_path;
     QIcon m_icon;
 

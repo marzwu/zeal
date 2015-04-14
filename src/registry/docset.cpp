@@ -1,6 +1,7 @@
 #include "docset.h"
 
 #include "docsetinfo.h"
+#include "searchquery.h"
 
 #include <QDir>
 #include <QFile>
@@ -61,7 +62,7 @@ Docset::Docset(const QString &path) :
     if (!dir.cd(QStringLiteral("Documents")))
         return;
 
-    prefix = info.bundleName.isEmpty() ? m_name : info.bundleName;
+    m_keyword = (info.bundleName.isEmpty() ? m_name : info.bundleName).toLower();
 
     // Try to find index path if metadata is missing one
     if (m_indexFilePath.isEmpty()) {
@@ -74,8 +75,6 @@ Docset::Docset(const QString &path) :
     }
 
     countSymbols();
-
-    m_isValid = true;
 }
 
 Docset::~Docset()
@@ -85,12 +84,7 @@ Docset::~Docset()
 
 bool Docset::isValid() const
 {
-    return m_isValid;
-}
-
-bool Docset::hasMetadata() const
-{
-    return m_hasMetadata;
+    return m_type != Type::Invalid;
 }
 
 QString Docset::name() const
@@ -103,6 +97,11 @@ QString Docset::title() const
     return m_title;
 }
 
+QString Docset::keyword() const
+{
+    return m_keyword;
+}
+
 QString Docset::version() const
 {
     return m_version;
@@ -111,11 +110,6 @@ QString Docset::version() const
 QString Docset::revision() const
 {
     return m_revision;
-}
-
-Docset::Type Docset::type() const
-{
-    return m_type;
 }
 
 QString Docset::path() const
@@ -153,6 +147,75 @@ const QMap<QString, QString> &Docset::symbols(const QString &symbolType) const
     if (!m_symbols.contains(symbolType))
         loadSymbols(symbolType);
     return m_symbols[symbolType];
+}
+
+QList<SearchResult> Docset::search(const QString &query) const
+{
+    QList<SearchResult> results;
+
+    const SearchQuery searchQuery = SearchQuery::fromString(query);
+    const QString sanitizedQuery = searchQuery.sanitizedQuery();
+
+    if (searchQuery.hasKeywords() && !searchQuery.hasKeyword(m_keyword))
+        return results;
+
+    QString queryStr;
+
+    bool withSubStrings = false;
+    // %.%1% for long Django docset values like django.utils.http
+    // %::%1% for long C++ docset values like std::set
+    // %/%1% for long Go docset values like archive/tar
+    QString subNames = QStringLiteral(" OR %1 LIKE '%.%2%' ESCAPE '\\'");
+    subNames += QLatin1String(" OR %1 LIKE '%::%2%' ESCAPE '\\'");
+    subNames += QLatin1String(" OR %1 LIKE '%/%2%' ESCAPE '\\'");
+    while (results.size() < 100) {
+        QString curQuery = sanitizedQuery;
+        QString notQuery; // don't return the same result twice
+        if (withSubStrings) {
+            // if less than 100 found starting with query, search all substrings
+            curQuery = QLatin1Char('%') + sanitizedQuery;
+            // don't return 'starting with' results twice
+            if (m_type == Docset::Type::Dash)
+                notQuery = QString(" AND NOT (name LIKE '%1%' ESCAPE '\\' %2) ").arg(sanitizedQuery, subNames.arg("name", sanitizedQuery));
+            else
+                notQuery = QString(" AND NOT (ztokenname LIKE '%1%' ESCAPE '\\' %2) ").arg(sanitizedQuery, subNames.arg("ztokenname", sanitizedQuery));
+        }
+        if (m_type == Docset::Type::Dash) {
+            queryStr = QString("SELECT name, path "
+                               "    FROM searchIndex "
+                               "WHERE (name LIKE '%1%' ESCAPE '\\' %3) %2 "
+                               "LIMIT 100")
+                    .arg(curQuery, notQuery, subNames.arg("name", curQuery));
+        } else {
+            queryStr = QString("SELECT ztokenname, zpath, zanchor "
+                               "    FROM ztoken "
+                               "JOIN ztokenmetainformation "
+                               "    ON ztoken.zmetainformation = ztokenmetainformation.z_pk "
+                               "JOIN zfilepath "
+                               "    ON ztokenmetainformation.zfile = zfilepath.z_pk "
+                               "WHERE (ztokenname LIKE '%1%' ESCAPE '\\' %3) %2 "
+                               "LIMIT 100").arg(curQuery, notQuery,
+                                                subNames.arg("ztokenname", curQuery));
+        }
+
+        QSqlQuery query(queryStr, database());
+        while (query.next()) {
+            const QString itemName = query.value(0).toString();
+            QString path = query.value(1).toString();
+            if (m_type == Docset::Type::ZDash)
+                path += QLatin1Char('#') + query.value(1).toString();
+
+            /// TODO: Third should be type
+            results.append(SearchResult{itemName, QString(), QString(),
+                                        const_cast<Docset *>(this), path, sanitizedQuery});
+        }
+
+        if (withSubStrings)
+            break;
+        withSubStrings = true;  // try again searching for substrings
+    }
+
+    return results;
 }
 
 QList<SearchResult> Docset::relatedLinks(const QUrl &url) const
@@ -255,8 +318,6 @@ void Docset::loadMetadata()
         const QJsonObject extra = jsonObject[QStringLiteral("extra")].toObject();
         m_indexFilePath = extra[QStringLiteral("indexFilePath")].toString();
     }
-
-    m_hasMetadata = true;
 }
 
 void Docset::countSymbols()
@@ -297,11 +358,9 @@ void Docset::loadSymbols(const QString &symbolType, const QString &symbolString)
         return;
 
     QString queryStr;
-    switch (m_type) {
-    case Docset::Type::Dash:
+    if (m_type == Docset::Type::Dash) {
         queryStr = QStringLiteral("SELECT name, path FROM searchIndex WHERE type='%1' ORDER BY name ASC");
-        break;
-    case Docset::Type::ZDash:
+    } else {
         queryStr = QStringLiteral("SELECT ztokenname AS name, "
                                   "CASE WHEN (zanchor IS NULL) THEN zpath "
                                   "ELSE (zpath || '#' || zanchor) "
@@ -310,7 +369,6 @@ void Docset::loadSymbols(const QString &symbolType, const QString &symbolString)
                                   "JOIN zfilepath ON ztokenmetainformation.zfile = zfilepath.z_pk "
                                   "JOIN ztokentype ON ztoken.ztokentype = ztokentype.z_pk WHERE ztypename='%1' "
                                   "ORDER BY ztokenname ASC");
-        break;
     }
 
     QSqlQuery query(queryStr.arg(symbolString), database());
