@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>About Zeal</string>
+   <string>关于marzAPI</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -44,7 +44,7 @@
         <item>
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>&lt;h1&gt;Marz&lt;/h1&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:xx-large; font-weight:600;&quot;&gt;marzAPI&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -67,13 +67,13 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>About</string>
+       <string>关于</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;离线API查看器&lt;br/&gt;&lt;br/&gt;Copyright © Marz Developers, 2014-2015. &lt;br/&gt;&lt;a href=&quot;http://github.com/marzwu&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://github.com/marzwu&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;&lt;a href=&quot;irc://irc.freenode.net/zealdocs&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;#zealdocs&lt;/span&gt;&lt;/a&gt; on &lt;a href=&quot;http://www.freenode.net&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Freenode&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;Marz is an open source software available under the terms of General Public License version 3 (&lt;a href=&quot;http://www.gnu.org/copyleft/gpl.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GPLv3&lt;/span&gt;&lt;/a&gt;). &lt;br/&gt;&lt;br/&gt;Docsets are courtesy of &lt;a href=&quot;http://kapeli.com/dash&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Dash&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;离线API查看器&lt;br/&gt;&lt;br/&gt;版权所有 © Marz, 2014-2015. &lt;br/&gt;&lt;a href=&quot;http://github.com/marzwu&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://github.com/marzwu&lt;/span&gt;&lt;/a&gt;&lt;br/&gt;&lt;br/&gt;API文档来自&lt;a href=&quot;http://kapeli.com/dash&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Dash&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

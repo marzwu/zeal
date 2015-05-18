@@ -210,7 +210,7 @@ QFrame#searchEditFrame, QFrame#tabBarFrame {
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>&amp;File</string>
+     <string>文件 &amp;F</string>
     </property>
     <addaction name="actionOptions"/>
     <addaction name="separator"/>
@@ -218,7 +218,7 @@ QFrame#searchEditFrame, QFrame#tabBarFrame {
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>&amp;Help</string>
+     <string>帮助 &amp;H</string>
     </property>
     <addaction name="actionReportProblem"/>
     <addaction name="actionCheckForUpdate"/>
@@ -228,14 +228,14 @@ QFrame#searchEditFrame, QFrame#tabBarFrame {
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
-     <string>&amp;View</string>
+     <string>视图 &amp;V</string>
     </property>
     <addaction name="actionBack"/>
     <addaction name="actionForward"/>
    </widget>
    <widget class="QMenu" name="menuTabs">
     <property name="title">
-     <string>&amp;Tabs</string>
+     <string>标签页 &amp;T</string>
     </property>
     <addaction name="actionNewTab"/>
     <addaction name="actionCloseTab"/>
@@ -250,37 +250,37 @@ QFrame#searchEditFrame, QFrame#tabBarFrame {
   </widget>
   <action name="actionQuit">
    <property name="text">
-    <string>&amp;Quit</string>
+    <string>退出 &amp;Q</string>
    </property>
   </action>
   <action name="actionOptions">
    <property name="text">
-    <string>&amp;Options</string>
+    <string>选项 &amp;O</string>
    </property>
   </action>
   <action name="actionAboutZeal">
    <property name="text">
-    <string>About &amp;Zeal</string>
+    <string>关于 &amp;marzAPI</string>
    </property>
   </action>
   <action name="actionAboutQt">
    <property name="text">
-    <string>About &amp;Qt</string>
+    <string>关于 &amp;Qt</string>
    </property>
   </action>
   <action name="actionBack">
    <property name="text">
-    <string>&amp;Back</string>
+    <string>回退 &amp;B</string>
    </property>
   </action>
   <action name="actionForward">
    <property name="text">
-    <string>&amp;Forward</string>
+    <string>向前 &amp;F</string>
    </property>
   </action>
   <action name="actionNewTab">
    <property name="text">
-    <string>New Tab</string>
+    <string>新标签页</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
@@ -288,27 +288,27 @@ QFrame#searchEditFrame, QFrame#tabBarFrame {
   </action>
   <action name="actionCloseTab">
    <property name="text">
-    <string>Close Tab</string>
+    <string>关闭标签页</string>
    </property>
   </action>
   <action name="actionNextTab">
    <property name="text">
-    <string>Next Tab</string>
+    <string>下一个标签页</string>
    </property>
   </action>
   <action name="actionPreviousTab">
    <property name="text">
-    <string>Previous Tab</string>
+    <string>前一个标签页</string>
    </property>
   </action>
   <action name="actionReportProblem">
    <property name="text">
-    <string>&amp;Report Problem...</string>
+    <string>上报bug &amp;R</string>
    </property>
   </action>
   <action name="actionCheckForUpdate">
    <property name="text">
-    <string>&amp;Check for Update...</string>
+    <string>检查更新 &amp;C</string>
    </property>
   </action>
  </widget>
