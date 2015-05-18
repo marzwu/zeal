@@ -24,19 +24,19 @@
      </property>
      <widget class="QWidget" name="generalTab">
       <attribute name="title">
-       <string>General</string>
+       <string>通用</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
         <widget class="QGroupBox" name="groupBox_3">
          <property name="title">
-          <string>Startup</string>
+          <string>开始界面</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_9">
           <item>
            <widget class="QCheckBox" name="startMinimizedCheckBox">
             <property name="text">
-             <string>Start minimized</string>
+             <string>启动时最小化</string>
             </property>
            </widget>
           </item>
@@ -46,7 +46,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Restore last state (not implemented)</string>
+             <string>保存上次状态</string>
             </property>
            </widget>
           </item>
@@ -56,7 +56,7 @@
        <item>
         <widget class="QGroupBox" name="systrayGroupBox">
          <property name="title">
-          <string>Show system tray icon</string>
+          <string>显示系统托盘图标</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -65,14 +65,14 @@
           <item>
            <widget class="QCheckBox" name="minimizeToSystrayCheckBox">
             <property name="text">
-             <string>Minimize to system tray instead of taskbar</string>
+             <string>最小化时显示在系统托盘，不在任务栏显示</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="hideToSystrayCheckBox">
             <property name="text">
-             <string>Hide to system tray on window close</string>
+             <string>关闭窗口时最小化到系统托盘</string>
             </property>
            </widget>
           </item>
@@ -82,7 +82,7 @@
        <item>
         <widget class="QGroupBox" name="globalHotKeyGroupBox">
          <property name="title">
-          <string>Global shortcuts</string>
+          <string>快照</string>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
           <property name="fieldGrowthPolicy">
@@ -91,14 +91,14 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_9">
             <property name="text">
-             <string>Show Zeal:</string>
+             <string>marzAPI：</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
            <widget class="ShortcutEdit" name="toolButton">
             <property name="placeholderText">
-             <string>Click to set shortcut</string>
+             <string>点击设置快照目录</string>
             </property>
             <property name="clearButtonEnabled">
              <bool>true</bool>
@@ -111,7 +111,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_4">
          <property name="title">
-          <string>Docset storage</string>
+          <string>API存储</string>
          </property>
          <layout class="QFormLayout" name="formLayout_3">
           <property name="fieldGrowthPolicy">
@@ -120,7 +120,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>Directory:</string>
+             <string>目录：</string>
             </property>
            </widget>
           </item>
@@ -132,7 +132,7 @@
             <item>
              <widget class="QPushButton" name="storageButton">
               <property name="text">
-               <string>Browse...</string>
+               <string>选择文件夹</string>
               </property>
              </widget>
             </item>
@@ -158,19 +158,19 @@
      </widget>
      <widget class="QWidget" name="appearanceTab">
       <attribute name="title">
-       <string>Appearance</string>
+       <string>显示</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
-          <string>Browser</string>
+          <string>浏览器</string>
          </property>
          <layout class="QFormLayout" name="formLayout_4">
           <item row="0" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Minimum font size:</string>
+             <string>最小字体：</string>
             </property>
            </widget>
           </item>
@@ -197,19 +197,19 @@
      </widget>
      <widget class="QWidget" name="networkTab">
       <attribute name="title">
-       <string>Network</string>
+       <string>网络</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>HTTP Proxy</string>
+          <string>HTTP代理设置</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_10">
           <item>
            <widget class="QRadioButton" name="noProxySettings">
             <property name="text">
-             <string>No proxy</string>
+             <string>不使用代理</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -222,7 +222,7 @@
              <bool>true</bool>
             </property>
             <property name="text">
-             <string>System proxy settings</string>
+             <string>使用系统代理设置</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -232,7 +232,7 @@
           <item>
            <widget class="QRadioButton" name="manualProxySettings">
             <property name="text">
-             <string>Manual proxy configuration</string>
+             <string>手动设置代理</string>
             </property>
            </widget>
           </item>
@@ -246,7 +246,7 @@
                  <bool>false</bool>
                 </property>
                 <property name="text">
-                 <string>HTTP proxy:</string>
+                 <string>HTTP代理</string>
                 </property>
                </widget>
               </item>
@@ -285,7 +285,7 @@
                <bool>false</bool>
               </property>
               <property name="text">
-               <string>HTTP proxy requires authentication</string>
+               <string>HTTP代理登录</string>
               </property>
              </widget>
             </item>
@@ -310,7 +310,7 @@
                   <bool>false</bool>
                  </property>
                  <property name="text">
-                  <string>Username:</string>
+                  <string>用户名：</string>
                  </property>
                 </widget>
                </item>
@@ -327,7 +327,7 @@
                   <bool>false</bool>
                  </property>
                  <property name="text">
-                  <string>Password:</string>
+                  <string>密码：</string>
                  </property>
                 </widget>
                </item>
@@ -366,7 +366,7 @@
      </widget>
      <widget class="QWidget" name="docsetsTab">
       <attribute name="title">
-       <string>Docsets</string>
+       <string>API</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
@@ -380,14 +380,14 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Update docsets</string>
+            <string>更新API</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="addFeedButton">
            <property name="text">
-            <string>Add feed</string>
+            <string>添加源</string>
            </property>
           </widget>
          </item>
@@ -410,7 +410,7 @@
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Delete</string>
+            <string>删除</string>
            </property>
           </widget>
          </item>
@@ -426,7 +426,7 @@
        <item>
         <widget class="QGroupBox" name="downloadableGroup">
          <property name="title">
-          <string>Downloadable docsets</string>
+          <string>API列表</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
@@ -437,7 +437,7 @@
             <item>
              <widget class="QLabel" name="label">
               <property name="text">
-               <string>Last updated:</string>
+               <string>上次更新：</string>
               </property>
              </widget>
             </item>
@@ -451,7 +451,7 @@
             <item>
              <widget class="QPushButton" name="refreshButton">
               <property name="text">
-               <string>Refresh</string>
+               <string>刷新</string>
               </property>
              </widget>
             </item>
@@ -474,7 +474,7 @@
                <bool>true</bool>
               </property>
               <property name="text">
-               <string>Download</string>
+               <string>下载</string>
               </property>
              </widget>
             </item>
@@ -483,7 +483,7 @@
           <item>
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>&lt;i&gt;Docsets are provided by &lt;a href=&quot;http://kapeli.com/dash&quot;&gt;Dash&lt;/a&gt;, the OS X Documentation Browser.&lt;/i&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="textFormat">
              <enum>Qt::RichText</enum>
